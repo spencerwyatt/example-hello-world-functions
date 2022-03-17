@@ -32,8 +32,8 @@ exports.handler = async function(event, context) {
   base('Quotes').create([
     {
       "fields": {
-        "Quote": JSON.parse(quote_body).quoteId,
-        "Data": quote_body
+        Quote: JSON.parse(quote_body).quoteId,
+        Data: quote_body
       }
     }
   ], function(err, records) {
