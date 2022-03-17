@@ -15,6 +15,7 @@ exports.handler = async function(event, context) {
   
   const quote_body = event.body;
   
+  console.log(quote_body);
   console.log(JSON.parse(quote_body).quoteId);
   
   // return {
