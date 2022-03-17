@@ -9,60 +9,49 @@ exports.handler = async function(event, context) {
   if (!airtable_api_key) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ msg: "Missing Airtable API environment variables" })
+      body: JSON.stringify({ msg: "Missing Airtable API environment variables" }),
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Methods": "POST, OPTION",
+      },
     }
   }
   
   const quote_body = event.body;
-  
-  console.log(quote_body);
-  console.log(JSON.parse(quote_body).quoteId);
-  
-  // return {
-  //   statusCode: 200,
-  //   body: JSON.stringify(quote_body),
-  //   headers: {
-  //     "Access-Control-Allow-Origin": "*",
-  //     "Access-Control-Allow-Headers": "Content-Type",
-  //     "Access-Control-Allow-Methods": "GET, POST, OPTION",
-  //   },
-  // };
+  const quoteId = JSON.parse(quote_body).quoteId
 
-  var base = new Airtable({apiKey: airtable_api_key}).base('appCBbGAaPXDIwMEK');
-  
-  console.log(JSON.stringify(base));
+  var base = new Airtable({apiKey: 'keyBusLTnPAtXou08'}).base('appCBbGAaPXDIwMEK');
 
-  base('Quotes').create([
+  const record = await base('Quotes').create([
     {
       "fields": {
-        "Quote": JSON.parse(quote_body).quoteId
+        "Quote": quoteId,
+        "Data": quote_body
       }
     }
-  ], function(err, records) {
-    if (err) {
-      console.error(err);
-      return {
-        statusCode: 500,
-        body: JSON.stringify(err),
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Headers": "Content-Type",
-          "Access-Control-Allow-Methods": "POST, OPTION",
-        }
-      }
-    }
-    records.forEach(function (record) {
-      console.log(record.getId());
-      return {
-        statusCode: 200,
-        body: JSON.stringify(record.getId()),
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Headers": "Content-Type",
-          "Access-Control-Allow-Methods": "POST, OPTION",
-        },
-      };
-    });
-  });
+  ])
   
+  if (record) {
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ msg: "Airtable record created" }),
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Methods": "POST, OPTION",
+      },
+    };
+  } else {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ msg: "Missing Airtable API environment variables" }),
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Methods": "POST, OPTION",
+      },
+    }
+  }
+
 }
