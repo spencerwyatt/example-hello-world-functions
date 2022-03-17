@@ -1,6 +1,6 @@
 /* eslint-disable */
-const fetch = require('node-fetch');
-const Airtable = require('airtable');
+import fetch from 'node-fetch';
+import Airtable from 'airtable';
 
 const airtable_api_key = process.env.AIRTABLE_API_KEY;
 
@@ -13,7 +13,7 @@ exports.handler = async function(event, context) {
     }
   }
   
-  var quote_body = event.body;
+  const quote_body = event.body;
   
   console.log(quote_body);
   
