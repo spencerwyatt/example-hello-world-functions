@@ -21,7 +21,7 @@ exports.handler = async function(event, context) {
   const quote_body = event.body;
   const quoteId = JSON.parse(quote_body).quoteId
 
-  var base = new Airtable({apiKey: airtable_api_key}).base('appCBbGAaPXDIwMEK');
+  var base = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base('appCBbGAaPXDIwMEK');
 
   const record = await base('Quotes').create([
     {
