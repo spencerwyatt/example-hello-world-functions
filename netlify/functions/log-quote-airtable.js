@@ -15,7 +15,7 @@ exports.handler = async function(event, context) {
   
   const quote_body = event.body;
   
-  console.log(quote_body.quoteId);
+  console.log(JSON.parse(quote_body).quoteId);
   
   return {
     statusCode: 200,
