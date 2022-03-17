@@ -17,7 +17,10 @@ exports.handler = async function(event, context) {
   
   console.log(quote_body);
   
-  return null;
+  return {
+    statusCode: 200,
+    body: JSON.stringify(quote_body),
+  };
 
   // var base = new Airtable({apiKey: 'YOUR_API_KEY'}).base('appCBbGAaPXDIwMEK');
   // 
