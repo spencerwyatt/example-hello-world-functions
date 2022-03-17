@@ -28,51 +28,41 @@ exports.handler = async function(event, context) {
   //   },
   // };
 
-  var base = new Airtable({apiKey: 'YOUR_API_KEY'}).base('appCBbGAaPXDIwMEK');
+  var base = new Airtable({apiKey: airtable_api_key}).base('appCBbGAaPXDIwMEK');
   
   console.log(JSON.stringify(base));
-  
+
+  base('Quotes').create([
+    {
+      "fields": {
+        "Quote": JSON.parse(quote_body).quoteId
+      }
+    }
+  ], function(err, records) {
+    if (err) {
+      console.error(err);
+      return {
+        statusCode: 500,
+        body: JSON.stringify(err),
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Allow-Methods": "POST, OPTION",
+        }
+      }
+    }
+    records.forEach(function (record) {
+      console.log(record.getId());
       return {
         statusCode: 200,
-        body: JSON.stringify(JSON.parse(quote_body).quoteId),
+        body: JSON.stringify(record.getId()),
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Headers": "Content-Type",
           "Access-Control-Allow-Methods": "POST, OPTION",
         },
       };
-  
-  // base('Quotes').create([
-  //   {
-  //     "fields": {
-  //       "Quote": JSON.parse(quote_body).quoteId
-  //     }
-  //   }
-  // ], function(err, records) {
-  //   if (err) {
-  //     console.error(err);
-  //     return {
-  //       statusCode: 500,
-  //       body: JSON.stringify(err),
-  //       headers: {
-  //         "Access-Control-Allow-Origin": "*",
-  //         "Access-Control-Allow-Headers": "Content-Type",
-  //         "Access-Control-Allow-Methods": "POST, OPTION",
-  //       }
-  //     }
-  //   }
-  //   records.forEach(function (record) {
-  //     console.log(record.getId());
-  //     return {
-  //       statusCode: 200,
-  //       body: JSON.stringify(record.getId()),
-  //       headers: {
-  //         "Access-Control-Allow-Origin": "*",
-  //         "Access-Control-Allow-Headers": "Content-Type",
-  //         "Access-Control-Allow-Methods": "POST, OPTION",
-  //       },
-  //     };
-  //   });
-  // });
+    });
+  });
   
 }
